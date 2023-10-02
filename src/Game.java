@@ -17,6 +17,16 @@ public class Game {
             System.out.println("Spillerens tur");
 
 
+
+            System.out.println("Fjendens tur");
+
+
+            if (player.getSoldiers() <=0)
+                System.out.println("Du har tabt. Enemy vandt");
+            else if (enemy.getSoldiers() <=0) {
+                System.out.println("Du har vundet!");
+            }
+
         }
 
     }
