@@ -3,10 +3,6 @@ import java.util.Scanner;
 
 public class Player {
 
-    Scanner keyboard = new Scanner(System.in);
-    Random random = new Random();
-
-    private int dice = random.nextInt(6) - 1;
     private int postion;
     private int soldiers;
     private int firepower;
@@ -17,8 +13,8 @@ public class Player {
         this.firepower = firepower;
         this.bombs = bombs;
         this.postion = postion;
-        this.dice = dice;
     }
+
 
 
     public int getPostion() {
@@ -39,6 +35,7 @@ public class Player {
 
 
     public void moveForward() {
+
 
 
     }
@@ -74,11 +71,4 @@ public class Player {
     }
 
 
-    public int getDice() {
-        return dice;
-    }
-
-    public void setDice(int dice) {
-        this.dice = dice;
-    }
 }
