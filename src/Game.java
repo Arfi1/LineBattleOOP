@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -12,6 +13,8 @@ public class Game {
         player = new Player (10, 25, 2500, 1);
         enemy = new Player (-10, 25, 2500, 1);
     }
+
+
 
 
     public void play() {

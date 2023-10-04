@@ -6,6 +6,7 @@ private Die die;
 private Game game;
 
 
+
     private int postion;
     private int soldiers;
     private int firepower;
@@ -79,6 +80,7 @@ private Game game;
         }
         firepower += 250;
 
+        //her skal der tages hensyn til at der er en enemy- og play-position
         if (postion == 10 && bombs == 0) {
             bombs = 1;
         }
@@ -86,25 +88,39 @@ private Game game;
 
 
 
-    public void attack() {
-       /* //terningen slås igen
-        int dice = random.nextInt(6)+1;
-        // 100 ildkraft * terningens øjne (man kan ikke bruge mere ildkraft end hvad man har)
-        firepower = 100 * dice;
+    public void attack(Player enemy) {
+        int dieRollResult = die.roll();
 
-        //Hvis distance er større eller lig med 1 && hvis distance er mindre eller lig med 6
-        if (distance >= 1 && distance <= 6) {
-            //Math.min bliver brugt for at sikre der ikke trækkes flere soldater fra modstanderen end der er.
-            //Player soldiers bliver trukket fra ift distancen.
-            soldiers -= Math.min(6, distance); */
+        firepower -= dieRollResult*100;
+        int difference = Math.abs(postion - enemy.getPostion());
 
-    }
+        if (difference < 6) {
+            soldiers = (6 - difference);
+        } else
+            soldiers = (5 - difference);
 
-    public void placeBomb() {
 
     }
 
-    public void detonateBomb() {
+    public void placeBomb(Player enemy) {
+
+        if (postion < 0 && enemy.getPostion() > 0) {
+            bombs -= bombs;
+        }
+
+    }
+
+    public void detonateBomb(Player enemy) {
+
+        if (bombs == 1 && postion <=10 && postion >= 0) {
+            if (postion >= enemy.getPostion() + 6) {
+                System.out.println("Player detonated BOMB in enemys territory");
+            }
+            else
+                System.out.println("Player needs to be atleats 6 fields away from Enemy to detonate the BOMB");
+        }
+        else System.out.println("Cannot detonate BOMB. Make sure the bomb is placed and you are on your own territory.");
+
 
     }
 
