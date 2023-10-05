@@ -15,6 +15,13 @@ public class Game {
     }
 
 
+    public void welcomeMessage() {
+        System.out.println("Welcome to Line Battle");
+        System.out.println("The game will begin!");
+        System.out.println("May the best player win!");
+
+        System.out.printf("%n_____________________________________________________________________________%n%n");
+    }
 
 
     public void play() {
@@ -22,6 +29,21 @@ public class Game {
         while (player.getSoldiers() > 0 && enemy.getSoldiers() > 0) {
 
             System.out.println("Spillerens tur");
+            System.out.println("Roll the dice");
+            System.out.println("Player rolled a " + player );
+
+            System.out.println("Do you want to Move forward" + "YES/NO");
+            String response = keyboard.nextLine();
+            if (response.equalsIgnoreCase("Yes")) {
+                player.moveForward();
+            } else
+           if (response.equalsIgnoreCase("No"))
+               System.out.println("Do you want to Move Backwards" + "YES/NO");
+            if (response.equalsIgnoreCase("Yes")){
+                player.moveBackwards();
+            }
+
+
 
 
 
@@ -39,6 +61,12 @@ public class Game {
 
     }
 
+    public static void main(String[] args) {
+        Game game = new Game();
+        game.welcomeMessage();
+
+        game.play();
+    }
 
 }
 

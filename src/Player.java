@@ -7,7 +7,7 @@ public class Player {
 
     Scanner keyboard = new Scanner(System.in);
 
-    private int postion;
+    private int position;
     private int soldiers;
     private int firepower;
     private int bombs;
@@ -15,13 +15,12 @@ public class Player {
     boolean bombPlaced = false;
     boolean isGameRunning = false;
 
-    public Player(int postion, int soldiers, int firepower, int bombs) {
+    public Player(int position, int soldiers, int firepower, int bombs) {
         this.soldiers = soldiers;
         this.firepower = firepower;
         this.bombs = bombs;
-        this.postion = postion;
+        this.position = position;
         die = new Die();
-        game = new Game();
     }
 
     public int getSoldiers() {
@@ -48,23 +47,23 @@ public class Player {
         this.bombs = bombs;
     }
 
-    public int getPostion() {
-        return postion;
+    public int getPosition() {
+        return position;
     }
 
-    public void setPostion(int postion) {
-        this.postion = postion;
+    public void setPostion(int position) {
+        this.position = position;
     }
 
     public void moveForward() {
         // hvis dice er lig med et heltal, rykker enemy position 2 frem
 
         if (die.roll() % 2 == 0) {
-            postion += 2;
-            System.out.println("Position: " + postion);
+            position += 2;
+            System.out.println("Position: " + position);
         } else {
-            postion += 1;
-            System.out.println("Position: " + postion);
+            position += 1;
+            System.out.println("Position: " + position);
         }
 
 
@@ -76,18 +75,18 @@ public class Player {
 
         if (dieRollResult <= 2) {
             // Træk 1 felt tilbage
-            postion += 1;
+            position -= 1;
         } else if (dieRollResult == 3 || dieRollResult == 4) {
             // Træk 2 felter tilbage
-            postion += 2;
+            position -= 2;
         } else {
             // Træk 3 felter tilbage
-            postion += 3;
+            position -= 3;
         }
         firepower += 250;
 
         //her skal der tages hensyn til at der er en enemy- og play-position
-        if (postion == 10 && bombs == 0) {
+        if (position == 10 && bombs == 0) {
             bombs = 1;
         }
     }
@@ -97,7 +96,7 @@ public class Player {
         int dieRollResult = die.roll();
 
         firepower -= dieRollResult * 100;
-        int difference = Math.abs(postion - enemy.getPostion());
+        int difference = Math.abs(position - enemy.getPosition());
 
         if (difference < 6) {
             soldiers = (6 - difference);
@@ -109,7 +108,7 @@ public class Player {
 
     public void placeBomb(Player enemy) {
 
-        if (postion < 0 && enemy.getPostion() > 0) {
+        if (position < 0 && enemy.getPosition() > 0) {
             bombs -= bombs;
         }
 
@@ -117,8 +116,8 @@ public class Player {
 
     public void detonateBomb(Player enemy) {
 
-        if (bombs == 1 && postion <= 10 && postion >= 0) {
-            if (postion >= enemy.getPostion() + 6) {
+        if (bombs == 1 && position <= 10 && position >= 0) {
+            if (position >= enemy.getPosition() + 6) {
                 System.out.println("Player detonated BOMB in enemys territory");
             } else
                 System.out.println("Player needs to be atleats 6 fields away from Enemy to detonate the BOMB");
@@ -129,49 +128,33 @@ public class Player {
     }
 
 
-
-    /*public void spejder(Player enemy) {
-        int difference = Math.abs( postion - enemy.getPostion());
-
-
-        if (difference == 1) {
-                System.out.println("The enemy is one position away");
-            }
-        if (difference == 2) {
-            System.out.println("The enemy is two postions away");
-        }
-        if (difference = ( 3- difference)) {
-            System.out.println();
-        } */
-
     public void spejderBesked(Player enemy) {
-        int afstand = Math.abs(postion - enemy.getPostion());
+
+        int position = this.getPosition();
+
+        int afstand = Math.abs(position - enemy.getPosition());
 
         if (afstand <= 2) {
-            if (postion < enemy.getPostion()) {
+            if (position < enemy.getPosition()) {
                 System.out.println("Fjenden er tæt på, " + afstand + " felter foran dig.");
-            } else if (postion > enemy.getPostion()) {
+            } else if (position > enemy.getPosition()) {
                 System.out.println("Fjenden er tæt på, " + afstand + " felter bag dig.");
 
             } else if (afstand <= 5){
-                 if (postion < enemy.getPostion()) {
+                 if (position < enemy.getPosition()) {
                     System.out.println("Fjenden er lidt længere væk, " + afstand + " felter foran dig.");
-                } else if (
-                        postion > enemy.getPostion()) {
+                } else if (position > enemy.getPosition()) {
                     System.out.println("Fjenden er lidt længere væk, " + afstand + " felter bag dig.");
                 }
             }
         }
-
-
-
     }
+
     public void stats(Player enemy) {
 
 
         System.out.println("Player has:" + firepower + " Firepower");
         System.out.println("Enemy has: " + enemy.getFirepower() + " Firepower");
-        System.out.println("Bomb placed: " + (bombPlaced ? "Yes" : "No"));
         System.out.println("Bomb placed: " + (bombPlaced ? "Yes" : "No"));
         System.out.println("Player has: " + soldiers + " soldiers");
         System.out.println("Enemy has: " + enemy.getSoldiers() + "soldiers");
@@ -183,9 +166,10 @@ public class Player {
     public void surrender(Player enemy) {
 
         System.out.println("Do you want to surrender Yes og No");
-        keyboard.nextLine();
+        String response = keyboard.nextLine();
 
-        isGameRunning = false;
-
+        if (response.equalsIgnoreCase("Yes")) {
+            isGameRunning = false;
+        }
     }
 }
