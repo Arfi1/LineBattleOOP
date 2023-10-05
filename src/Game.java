@@ -25,6 +25,7 @@ public class Game {
 
 
 
+
             System.out.println("Fjendens tur");
 
 

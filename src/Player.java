@@ -2,15 +2,18 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Player {
-private Die die;
-private Game game;
+    private Die die;
+    private Game game;
 
-
+    Scanner keyboard = new Scanner(System.in);
 
     private int postion;
     private int soldiers;
     private int firepower;
     private int bombs;
+
+    boolean bombPlaced = false;
+    boolean isGameRunning = false;
 
     public Player(int postion, int soldiers, int firepower, int bombs) {
         this.soldiers = soldiers;
@@ -24,12 +27,15 @@ private Game game;
     public int getSoldiers() {
         return soldiers;
     }
+
     public void setSoldiers(int soldiers) {
         this.soldiers = soldiers;
     }
+
     public int getFirepower() {
         return firepower;
     }
+
     public void setFirepower(int firepower) {
         this.firepower = firepower;
     }
@@ -87,11 +93,10 @@ private Game game;
     }
 
 
-
     public void attack(Player enemy) {
         int dieRollResult = die.roll();
 
-        firepower -= dieRollResult*100;
+        firepower -= dieRollResult * 100;
         int difference = Math.abs(postion - enemy.getPostion());
 
         if (difference < 6) {
@@ -112,25 +117,75 @@ private Game game;
 
     public void detonateBomb(Player enemy) {
 
-        if (bombs == 1 && postion <=10 && postion >= 0) {
+        if (bombs == 1 && postion <= 10 && postion >= 0) {
             if (postion >= enemy.getPostion() + 6) {
                 System.out.println("Player detonated BOMB in enemys territory");
-            }
-            else
+            } else
                 System.out.println("Player needs to be atleats 6 fields away from Enemy to detonate the BOMB");
+        } else
+            System.out.println("Cannot detonate BOMB. Make sure the bomb is placed and you are on your own territory.");
+
+
+    }
+
+
+
+    /*public void spejder(Player enemy) {
+        int difference = Math.abs( postion - enemy.getPostion());
+
+
+        if (difference == 1) {
+                System.out.println("The enemy is one position away");
+            }
+        if (difference == 2) {
+            System.out.println("The enemy is two postions away");
         }
-        else System.out.println("Cannot detonate BOMB. Make sure the bomb is placed and you are on your own territory.");
+        if (difference = ( 3- difference)) {
+            System.out.println();
+        } */
+
+    public void spejderBesked(Player enemy) {
+        int afstand = Math.abs(postion - enemy.getPostion());
+
+        if (afstand <= 2) {
+            if (postion < enemy.getPostion()) {
+                System.out.println("Fjenden er tæt på, " + afstand + " felter foran dig.");
+            } else if (postion > enemy.getPostion()) {
+                System.out.println("Fjenden er tæt på, " + afstand + " felter bag dig.");
+
+            } else if (afstand <= 5){
+                 if (postion < enemy.getPostion()) {
+                    System.out.println("Fjenden er lidt længere væk, " + afstand + " felter foran dig.");
+                } else if (
+                        postion > enemy.getPostion()) {
+                    System.out.println("Fjenden er lidt længere væk, " + afstand + " felter bag dig.");
+                }
+            }
+        }
+
+
+
+    }
+    public void stats(Player enemy) {
+
+
+        System.out.println("Player has:" + firepower + " Firepower");
+        System.out.println("Enemy has: " + enemy.getFirepower() + " Firepower");
+        System.out.println("Bomb placed: " + (bombPlaced ? "Yes" : "No"));
+        System.out.println("Bomb placed: " + (bombPlaced ? "Yes" : "No"));
+        System.out.println("Player has: " + soldiers + " soldiers");
+        System.out.println("Enemy has: " + enemy.getSoldiers() + "soldiers");
+
 
 
     }
 
-    public void spejder () {
+    public void surrender(Player enemy) {
+
+        System.out.println("Do you want to surrender Yes og No");
+        keyboard.nextLine();
+
+        isGameRunning = false;
 
     }
-
-    public void surrender() {
-
-    }
-
-
 }
