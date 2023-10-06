@@ -6,7 +6,7 @@ public class Die {
     private int value;
 
      public int roll() {
-         value = random.nextInt(6) - 1;
+         value = random.nextInt(6) + 1;
 
          return value;
      }

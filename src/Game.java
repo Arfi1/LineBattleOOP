@@ -34,38 +34,55 @@ public class Game {
 
 
             int dieRoll = die.roll();
-            System.out.println("Spillerens tur");
             System.out.println("Roll the dice" );
             keyboard.nextLine();
             System.out.println("Player rolled a " + dieRoll);
+            int updatedPlayerPosition = player.getPosition() - dieRoll;
+            player.setPostion(updatedPlayerPosition);
 
+            System.out.println("Player position: " + updatedPlayerPosition);
+
+            System.out.printf("%n_________________________________________________%n%n");
+
+
+            int dieRollEnemy = die.roll();
+            System.out.println("Enemy rolled a " + dieRollEnemy);
+            int updatedEnemyPosition = enemy.getPosition() + dieRollEnemy;
+            player.setPostion(updatedEnemyPosition);
+
+
+            System.out.println("Enemy position: " + updatedEnemyPosition);
+
+            System.out.printf("%n_________________________________________________%n%n");
+
+            System.out.println("\nSpillerens tur");
 
 
             if (player.getPosition() < 9) {
-                System.out.println("Do you want to Move forward" + "YES/NO");
+                System.out.println("Do you want to Move forward" + " YES/NO");
             }
             String response = keyboard.nextLine();
             if (response.equalsIgnoreCase("Yes")) {
                 player.moveForward();
             } else if (response.equalsIgnoreCase("No"))
                 System.out.println("Do you want to Move Backwards" + "YES/NO");
-            if (response.equalsIgnoreCase("Yes")) {
+            String response2 = keyboard.nextLine();
+            if (response2.equalsIgnoreCase("Yes")) {
                 do {
                     player.moveBackwards();
                 } while (player.getPosition() < 9 && player.getPosition() > -10);
 
+
+                System.out.println("Fjendens tur");
 
 
 
 
             }
 
-            int dieRollEnemy = die.roll();
-            System.out.println("Fjendens tur");
-            System.out.println("Enemy rolled a " + dieRollEnemy);
 
 
-            int result = enemy.moveForward();
+            enemy.moveForward();
             enemy.moveBackwards();
 
 
