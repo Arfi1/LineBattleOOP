@@ -57,42 +57,45 @@ public class Player {
     }
 
     public int moveForward() {
-        // hvis dice er lig med et heltal, rykker enemy position 2 frem
-
         if (die.roll() % 2 == 0) {
             position -= 2;
-            System.out.println("Position: " + position);
+            System.out.println("You have moved 2 tiles");
+            System.out.println("Player position: " + position);
         } else {
-            position -= 1;
-            System.out.println("Position: " + position);
+            position = 1;
+            System.out.println("You have moved 1 tiles");
+            System.out.println("Player position: " + position);
         }
 
         return position;
-
     }
 
     public int moveBackwards() {
 
+        // Move backwards within the extended player territory (10 to -10)
         int dieRollResult = die.roll();
+        int moveAmount;
 
-        if (dieRollResult <= 2) {
-            // Træk 1 felt tilbage
-            position += 1;
-        } else if (dieRollResult == 3 || dieRollResult == 4) {
-            // Træk 2 felter tilbage
-            position += 2;
+        if (position <= 10 && position >= -10) {  // Corrected condition
+            if (dieRollResult <= 2) {
+                moveAmount = 1;
+            } else if (dieRollResult == 3 || dieRollResult == 4) {
+                moveAmount = 2;
+            } else {
+                moveAmount = 3;
+            }
+
+            if (position - moveAmount >= -10) {  // Corrected condition
+                position -= moveAmount;  // Corrected the direction of movement
+            } else {
+                position = -10;  // Corrected the position when hitting the lower limit
+            }
+            firepower += 250;
         } else {
-            // Træk 3 felter tilbage
-            position -= 3;
+            System.out.println("Cannot move backwards outside the extended territory.");
         }
-        firepower += 250;
-
-        //her skal der tages hensyn til at der er en enemy- og play-position
-        if (position == 10 && bombs == 0) {
-            bombs = 1;
-        }
-
         return position;
+
     }
 
 

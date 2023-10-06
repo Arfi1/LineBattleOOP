@@ -57,15 +57,15 @@ public class Enemy {
 
     public int moveForward() {
 
-        // Move forward within the extended enemy territory (-10 to 10)
-        if (position < 10) {
-            if (position + 2 <= 10) {
-                position += 2;
-            } else {
-                position = 10;
-            }
+        if (die.roll() % 2 == 0) {
+            position -= 2;
+            System.out.println("Enemy moved 2 tiles");
+            System.out.println("Enemy position: " + position);
+        } else {
+            position = 1;
+            System.out.println("Enemy moved 1 tile");
+            System.out.println("Enemy position: " + position);
         }
-        System.out.println("Position: " + position);
         return position;
 
     }
@@ -92,7 +92,7 @@ public class Enemy {
             }
             firepower += 250;
         } else {
-            System.out.println("Cannot move backwards outside the extended enemy territory.");
+            System.out.println("Cannot move backwards outside the extended territory.");
         }
         return position;
     }

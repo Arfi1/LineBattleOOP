@@ -48,29 +48,27 @@ public class Game {
             int dieRollEnemy = die.roll();
             System.out.println("Enemy rolled a " + dieRollEnemy);
             int updatedEnemyPosition = enemy.getPosition() + dieRollEnemy;
-            player.setPostion(updatedEnemyPosition);
+            enemy.setPosition(updatedEnemyPosition);
 
 
-            System.out.println("Enemy position: " + updatedEnemyPosition);
+            System.out.println("Enemy position1: " + updatedEnemyPosition);
 
             System.out.printf("%n_________________________________________________%n%n");
 
             System.out.println("\nSpillerens tur");
 
-
-            if (player.getPosition() < 9) {
-                System.out.println("Do you want to Move forward" + " YES/NO");
-            }
+            System.out.println("Do you want to Move forward" + " YES/ NO");
             String response = keyboard.nextLine();
+            int numberOfTiles = 0;
             if (response.equalsIgnoreCase("Yes")) {
-                player.moveForward();
+                numberOfTiles = player.moveForward();
+                player.setPostion(player.getPosition() - numberOfTiles);
             } else if (response.equalsIgnoreCase("No"))
                 System.out.println("Do you want to Move Backwards" + "YES/NO");
             String response2 = keyboard.nextLine();
             if (response2.equalsIgnoreCase("Yes")) {
-                do {
-                    player.moveBackwards();
-                } while (player.getPosition() < 9 && player.getPosition() > -10);
+                int numberOfTiles2 = player.moveBackwards();
+                player.setPostion(player.getPosition() + numberOfTiles2);
 
 
                 System.out.println("Fjendens tur");
@@ -82,8 +80,8 @@ public class Game {
 
 
 
-            enemy.moveForward();
             enemy.moveBackwards();
+            enemy.moveForward();
 
 
             if (player.getSoldiers() <= 0)
