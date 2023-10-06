@@ -4,6 +4,7 @@ import java.util.Scanner;
 public class Player {
     private Die die;
     private Game game;
+    private Enemy enemy;
 
     Scanner keyboard = new Scanner(System.in);
 
@@ -55,30 +56,31 @@ public class Player {
         this.position = position;
     }
 
-    public void moveForward() {
+    public int moveForward() {
         // hvis dice er lig med et heltal, rykker enemy position 2 frem
 
         if (die.roll() % 2 == 0) {
-            position += 2;
+            position -= 2;
             System.out.println("Position: " + position);
         } else {
-            position += 1;
+            position -= 1;
             System.out.println("Position: " + position);
         }
 
+        return position;
 
     }
 
-    public void moveBackwards() {
+    public int moveBackwards() {
 
         int dieRollResult = die.roll();
 
         if (dieRollResult <= 2) {
             // Træk 1 felt tilbage
-            position -= 1;
+            position += 1;
         } else if (dieRollResult == 3 || dieRollResult == 4) {
             // Træk 2 felter tilbage
-            position -= 2;
+            position += 2;
         } else {
             // Træk 3 felter tilbage
             position -= 3;
@@ -89,10 +91,13 @@ public class Player {
         if (position == 10 && bombs == 0) {
             bombs = 1;
         }
+
+        return position;
     }
 
 
-    public void attack(Player enemy) {
+
+    public String attack(Player enemy) {
         int dieRollResult = die.roll();
 
         firepower -= dieRollResult * 100;
@@ -103,6 +108,7 @@ public class Player {
         } else
             soldiers = (5 - difference);
 
+        return "You attacked " + soldiers + " Soldiers";
 
     }
 
@@ -116,9 +122,11 @@ public class Player {
 
     public void detonateBomb(Player enemy) {
 
+        // hvis bomb er lig med 1 og position er mindre eller lig med 10 og position er mindre eller lig med nul
         if (bombs == 1 && position <= 10 && position >= 0) {
             if (position >= enemy.getPosition() + 6) {
                 System.out.println("Player detonated BOMB in enemys territory");
+                bombs -= bombs;
             } else
                 System.out.println("Player needs to be atleats 6 fields away from Enemy to detonate the BOMB");
         } else
@@ -128,7 +136,7 @@ public class Player {
     }
 
 
-    public void spejderBesked(Player enemy) {
+    public void spejderBesked() {
 
         int position = this.getPosition();
 
@@ -150,7 +158,7 @@ public class Player {
         }
     }
 
-    public void stats(Player enemy) {
+    public void stats() {
 
 
         System.out.println("Player has:" + firepower + " Firepower");
