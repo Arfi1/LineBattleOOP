@@ -72,6 +72,17 @@ public class Game {
 
 
                 System.out.println("Fjendens tur");
+                int numberOfTiles3 = 0;
+                System.out.println("Enemy moves forward");
+                numberOfTiles3 = enemy.moveForward();
+                System.out.println("Enemy position is: ");
+                enemy.setPosition(enemy.getPosition() - numberOfTiles3);
+
+                System.out.println("Enemy moved backwards");
+                int numberOfTiles4 = player.moveBackwards();
+                enemy.setPosition(enemy.getPosition() - numberOfTiles3);
+
+
 
 
 
