@@ -56,131 +56,86 @@ public class Player {
         this.position = position;
     }
 
-    public int moveForward() {
-        if (die.roll() % 2 == 0) {
-            position -= 2;
-            System.out.println("You have moved 2 tiles");
-            System.out.println("Player position: " + position);
+    public void moveForward() {
+        int move = die.roll();
+        position += move;
+        if (position > 10) {
+            position = 10;
+        }
+        System.out.println("Player moved forward " + move + " tiles. New position: " + position);
+        System.out.printf("%n_____________________________________________________________________________%n%n");
+
+    }
+
+    public void moveBackwards() {
+
+        int move = die.roll();
+        position -= move;
+        if (position < -10) {
+            position = -10;
+        }
+        System.out.println("Player moved backwards " + move + " tiles. New position: " + position);
+        System.out.printf("%n_____________________________________________________________________________%n%n");
+
+    }
+
+
+
+    public void attack(Enemy enemy) {
+
+        int attackPower = die.roll() * 100;
+        firepower -= attackPower;
+        int distance = Math.abs(position - enemy.getPosition());
+        int soldiersLost = Math.max(0, 6 - distance);
+        enemy.setSoldiers(enemy.getSoldiers() - soldiersLost);
+        System.out.println("Player attacked! Enemy lost " + soldiersLost + " soldiers.");
+
+    }
+
+    public void placeBomb() {
+
+        if (bombs > 0 && position < 0) {
+            bombs--;
+            System.out.println("Player placed a bomb at position " + position);
         } else {
-            position = 1;
-            System.out.println("You have moved 1 tiles");
-            System.out.println("Player position: " + position);
+            System.out.println("Player cannot place a bomb.");
         }
 
-        return position;
     }
 
-    public int moveBackwards() {
+    public void detonateBomb(Enemy enemy) {
 
-        // Move backwards within the extended player territory (10 to -10)
-        int dieRollResult = die.roll();
-        int moveAmount;
 
-        if (position <= 10 && position >= -10) {  // Corrected condition
-            if (dieRollResult <= 2) {
-                moveAmount = 1;
-            } else if (dieRollResult == 3 || dieRollResult == 4) {
-                moveAmount = 2;
-            } else {
-                moveAmount = 3;
-            }
-
-            if (position - moveAmount >= -10) {  // Corrected condition
-                position -= moveAmount;  // Corrected the direction of movement
-            } else {
-                position = -10;  // Corrected the position when hitting the lower limit
-            }
-            firepower += 250;
+        if (bombs == 0 && Math.abs(position - enemy.getPosition()) >= 6) {
+            enemy.setSoldiers(enemy.getSoldiers() - 10);  // Arbitrary damage amount
+            System.out.println("Player detonated the bomb! Enemy loses 10 soldiers.");
         } else {
-            System.out.println("Cannot move backwards outside the extended territory.");
-        }
-        return position;
-
-    }
-
-
-
-    public String attack(Player enemy) {
-        int dieRollResult = die.roll();
-
-        firepower -= dieRollResult * 100;
-        int difference = Math.abs(position - enemy.getPosition());
-
-        if (difference < 6) {
-            soldiers = (6 - difference);
-        } else
-            soldiers = (5 - difference);
-
-        return "You attacked " + soldiers + " Soldiers";
-
-    }
-
-    public void placeBomb(Player enemy) {
-
-        if (position < 0 && enemy.getPosition() > 0) {
-            bombs -= bombs;
+            System.out.println("Player cannot detonate the bomb.");
         }
 
     }
 
-    public void detonateBomb(Player enemy) {
 
-        // hvis bomb er lig med 1 og position er mindre eller lig med 10 og position er mindre eller lig med nul
-        if (bombs == 1 && position <= 10 && position >= 0) {
-            if (position >= enemy.getPosition() + 6) {
-                System.out.println("Player detonated BOMB in enemys territory");
-                bombs -= bombs;
-            } else
-                System.out.println("Player needs to be atleats 6 fields away from Enemy to detonate the BOMB");
-        } else
-            System.out.println("Cannot detonate BOMB. Make sure the bomb is placed and you are on your own territory.");
+    public void scout(Enemy enemy) {
 
-
-    }
-
-
-    public void spejderBesked() {
-
-        int position = this.getPosition();
-
-        int afstand = Math.abs(position - enemy.getPosition());
-
-        if (afstand <= 2) {
-            if (position < enemy.getPosition()) {
-                System.out.println("Fjenden er tæt på, " + afstand + " felter foran dig.");
-            } else if (position > enemy.getPosition()) {
-                System.out.println("Fjenden er tæt på, " + afstand + " felter bag dig.");
-
-            } else if (afstand <= 5){
-                 if (position < enemy.getPosition()) {
-                    System.out.println("Fjenden er lidt længere væk, " + afstand + " felter foran dig.");
-                } else if (position > enemy.getPosition()) {
-                    System.out.println("Fjenden er lidt længere væk, " + afstand + " felter bag dig.");
-                }
-            }
+        int distance = Math.abs(position - enemy.getPosition());
+        if (distance <= 2) {
+            System.out.println("Enemy is very close!");
+        } else if (distance <= 5) {
+            System.out.println("Enemy is at a medium distance.");
+        } else {
+            System.out.println("Enemy is far away.");
         }
     }
 
-    public void stats() {
+    public void showStats() {
 
-
-        System.out.println("Player has:" + firepower + " Firepower");
-        System.out.println("Enemy has: " + enemy.getFirepower() + " Firepower");
-        System.out.println("Bomb placed: " + (bombPlaced ? "Yes" : "No"));
-        System.out.println("Player has: " + soldiers + " soldiers");
-        System.out.println("Enemy has: " + enemy.getSoldiers() + "soldiers");
-
-
-
+        System.out.println("Player Stats: Position: " + position + ", Soldiers: " + soldiers + ", Firepower: " + firepower + ", Bombs: " + bombs);
     }
 
-    public void surrender(Player enemy) {
+    public void surrender() {
 
-        System.out.println("Do you want to surrender Yes og No");
-        String response = keyboard.nextLine();
-
-        if (response.equalsIgnoreCase("Yes")) {
-            isGameRunning = false;
-        }
+        System.out.println("Player surrenders. Enemy wins!");
+        System.exit(0);
     }
 }

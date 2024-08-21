@@ -55,83 +55,59 @@ public class Enemy {
         this.bombs = bombs;
     }
 
-    public int moveForward() {
+    public void moveForward() {
 
-        if (die.roll() % 2 == 0) {
-            position -= 2;
-            System.out.println("Enemy moved 2 tiles");
-            System.out.println("Enemy position: " + position);
-        } else {
-            position = 1;
-            System.out.println("Enemy moved 1 tile");
-            System.out.println("Enemy position: " + position);
+        int move = die.roll();
+        position += move;
+        if (position > 10) {
+            position = 10;
         }
-        return position;
-
-    }
-
-    public int moveBackwards() {
-
-        // Move backwards within the extended enemy territory (-10 to 10)
-        int dieRollResult = die.roll();
-        int moveAmount;
-
-        if (position >= -10 && position < 10) {
-            if (dieRollResult <= 2) {
-                moveAmount = 1;
-            } else if (dieRollResult == 3 || dieRollResult == 4) {
-                moveAmount = 2;
-            } else {
-                moveAmount = 3;
-            }
-
-            if (position - moveAmount >= -10) {
-                position -= moveAmount;
-            } else {
-                position = -10;
-            }
-            firepower += 250;
-        } else {
-            System.out.println("Cannot move backwards outside the extended territory.");
-        }
-        return position;
+        System.out.println("Enemy moved forward " + move + " tiles. New position: " + position);
     }
 
 
 
-    public String attack(Player player) {
+    public void moveBackwards() {
 
-        firepower -= die.roll() * 100;
-        int difference = Math.abs(position - player.getPosition());
+        int move = die.roll();
+        position -= move;
+        if (position < -10) {
+            position = -10;
+        }
+        System.out.println("Enemy moved backwards " + move + " tiles. New position: " + position);
+    }
 
-        if (difference < 6) {
-            soldiers = (6 - difference);
-        } else
-            soldiers = (5 - difference);
 
-        return "You attacked " + soldiers + " Soldiers";
 
+    public void attack(Player player) {
+
+
+        int attackPower = die.roll() * 100;
+        firepower -= attackPower;
+        int distance = Math.abs(position - player.getPosition());
+        int soldiersLost = Math.max(0, 6 - distance);
+        player.setSoldiers(player.getSoldiers() - soldiersLost);
+        System.out.println("Enemy attacked! Player lost " + soldiersLost + " soldiers.");
     }
 
     public void placeBomb() {
-
-
-        if (position < 0 && player.getPosition() > 0) {
-            bombs -= bombs;
+        if (bombs > 0 && position > 0) {
+            bombs--;
+            System.out.println("Enemy placed a bomb at position " + position);
+        } else {
+            System.out.println("Enemy cannot place a bomb.");
         }
-
     }
 
-    public void detonateBomb() {
-        if (bombs == 1 && position >= -10 && position >= 0) {
-            if (position >= player.getPosition() + 6) {
-                System.out.println("Player detonated BOMB in enemys territory");
-                bombs -= bombs;
-            } else
-                System.out.println("Player needs to be atleats 6 fields away from Enemy to detonate the BOMB");
-        } else
-            System.out.println("Cannot detonate BOMB. Make sure the bomb is placed and you are on your own territory.");
 
+
+    public void detonateBomb(Player player) {
+        if (bombs == 0 && Math.abs(position - player.getPosition()) >= 6) {
+            player.setSoldiers(player.getSoldiers() - 10);  // Arbitrary damage amount
+            System.out.println("Enemy detonated the bomb! Player loses 10 soldiers.");
+        } else {
+            System.out.println("Enemy cannot detonate the bomb.");
+        }
     }
 }
 

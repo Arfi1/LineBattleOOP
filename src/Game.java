@@ -6,10 +6,9 @@ public class Game {
     private Die die;
     private Player player;
     private Enemy enemy;
-    private Scanner keyboard = new Scanner(System.in);
+    private Scanner scanner = new Scanner(System.in);
 
-   /* private Player player;
-    private Enemy enemy;*/
+
 
 
     public Game() {
@@ -33,76 +32,70 @@ public class Game {
         while (player.getSoldiers() > 0 && enemy.getSoldiers() > 0) {
 
 
-            int dieRoll = die.roll();
-            System.out.println("Roll the dice" );
-            keyboard.nextLine();
-            System.out.println("Player rolled a " + dieRoll);
-            int updatedPlayerPosition = player.getPosition() - dieRoll;
-            player.setPostion(updatedPlayerPosition);
+            player.showStats();
+            enemyMove();
+            playerMove();
+        }
 
-            System.out.println("Player position: " + updatedPlayerPosition);
-
-            System.out.printf("%n_________________________________________________%n%n");
-
-
-            int dieRollEnemy = die.roll();
-            System.out.println("Enemy rolled a " + dieRollEnemy);
-            int updatedEnemyPosition = enemy.getPosition() + dieRollEnemy;
-            enemy.setPosition(updatedEnemyPosition);
-
-
-            System.out.println("Enemy position1: " + updatedEnemyPosition);
-
-            System.out.printf("%n_________________________________________________%n%n");
-
-            System.out.println("\nSpillerens tur");
-
-            System.out.println("Do you want to Move forward" + " YES/ NO");
-            String response = keyboard.nextLine();
-            int numberOfTiles = 0;
-            if (response.equalsIgnoreCase("Yes")) {
-                numberOfTiles = player.moveForward();
-                player.setPostion(player.getPosition() - numberOfTiles);
-            } else if (response.equalsIgnoreCase("No"))
-                System.out.println("Do you want to Move Backwards" + "YES/NO");
-            String response2 = keyboard.nextLine();
-            if (response2.equalsIgnoreCase("Yes")) {
-                int numberOfTiles2 = player.moveBackwards();
-                player.setPostion(player.getPosition() + numberOfTiles2);
-
-
-                System.out.println("Fjendens tur");
-                int numberOfTiles3 = 0;
-                System.out.println("Enemy moves forward");
-                numberOfTiles3 = enemy.moveForward();
-                System.out.println("Enemy position is: ");
-                enemy.setPosition(enemy.getPosition() - numberOfTiles3);
-
-                System.out.println("Enemy moved backwards");
-                int numberOfTiles4 = player.moveBackwards();
-                enemy.setPosition(enemy.getPosition() - numberOfTiles3);
-
-
-
-
-
-
-            }
-
-
-
-            enemy.moveBackwards();
-            enemy.moveForward();
-
-
-            if (player.getSoldiers() <= 0)
-                System.out.println("Du har tabt. Enemy vandt");
-            else if (enemy.getSoldiers() <= 0) {
-                System.out.println("Du har vundet!");
-            }
+        if (player.getSoldiers() <= 0) {
+            System.out.println("You have lost. Enemy wins!");
+        } else if (enemy.getSoldiers() <= 0) {
+            System.out.println("You have won!");
 
         }
+
     }
+
+
+    private void playerMove() {
+        System.out.println("\nPlayer's turn:");
+        System.out.println("Choose an action: [Move Forward / Move Backward / Attack / Place Bomb / Detonate Bomb / Scout / Surrender]");
+        String action = scanner.nextLine().trim().toLowerCase();
+
+        switch (action) {
+            case "move forward":
+                player.moveForward();
+                break;
+            case "move backward":
+                player.moveBackwards();
+                break;
+            case "attack":
+                player.attack(enemy);
+                break;
+            case "place bomb":
+                player.placeBomb();
+                break;
+            case "detonate bomb":
+                player.detonateBomb(enemy);
+                break;
+            case "scout":
+                player.scout(enemy);
+                break;
+            case "surrender":
+                player.surrender();
+                break;
+            default:
+                System.out.println("Invalid action. Try again.");
+                playerMove();
+                break;
+        }
+    }
+
+
+
+    private void enemyMove() {
+        System.out.println("\nEnemy's turn:");
+        if (enemy.getPosition() > player.getPosition()) {
+            enemy.moveBackwards();
+        } else {
+            enemy.moveForward();
+        }
+
+        if (enemy.getPosition() == player.getPosition()) {
+            enemy.attack(player);
+        }
+    }
+
 
 
 
